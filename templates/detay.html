@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ hasta.ad }} {{ hasta.soyad }} - Detay</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        h1, h2 { color: #333; }
+        table { border-collapse: collapse; width: 80%; margin-bottom: 30px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        a { text-decoration: none; color: blue; margin-right: 10px; }
+        .actions { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <h1>
+    Hasta: {{ hasta.ad }} {{ hasta.soyad }}
+    <form action="{{ url_for('hasta_sil', hasta_id=hasta.id) }}" method="POST" style="display:inline;">
+        <button type="submit" onclick="return confirm('Bu hastayı silmek istediğinize emin misiniz?')">
+            🗑 Hastayı Sil
+        </button>
+    </form>
+</h1>
+<p>Servis: {{ hasta.servis }}</p>
+<a href="{{ url_for('ana_sayfa') }}">← Geri Dön</a>
+
+    <div class="actions">
+        <!-- 🔹 Yeni butonlar -->
+        <a href="{{ url_for('bakteri_ekle', hasta_id=hasta.id) }}">+ Bakteri Ekle</a>
+        <a href="{{ url_for('antibiyotik_ekle', hasta_id=hasta.id) }}">+ Antibiyotik Ekle</a>
+    </div>
+
+    <h2>Bakteriler ve Antibiyogram</h2>
+    {% for bakteri in hasta.bakteriler %}
+
+    <h3>
+    {{ bakteri.isim }} ({{ bakteri.ureme_tarihi }})
+    <form action="{{ url_for('bakteri_sil', bakteri_id=bakteri.id) }}" method="POST" style="display:inline;">
+        <button type="submit" onclick="return confirm('Bu bakteriyi silmek istediğinize emin misiniz?')">
+            🗑 Sil
+        </button>
+    </form>
+</h3>
+
+
+
+   </h3>
+    <a href="{{ url_for('antibiyogram_ekle', bakteri_id=bakteri.id) }}">+ Antibiyogram Ekle</a>
+    <table>
+        <tr>
+            <th>Antibiyotik</th>
+            <th>Sonuç</th>
+             <th>Sil</th>  <!-- yeni sütun -->
+        </tr>
+        {% for ab in bakteri.antibiyogramlar %}
+        <tr>
+            <td>{{ ab.antibiyotik }}</td>
+            <td>{{ ab.sonuc }}</td>
+            <td>
+            <form action="{{ url_for('antibiyogram_sil', ab_id=ab.id) }}" method="POST" style="display:inline;">
+                <button type="submit" onclick="return confirm('Bu antibiyogramı silmek istediğinize emin misiniz?')">
+                    🗑 Sil
+                </button>
+            </form>
+        </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="2">Bu bakteri için antibiyogram yok.</td></tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>Bu hastada bakteri kaydı yok.</p>
+    {% endfor %}
+
+    <h2>Kullanılan Antibiyotikler</h2>
+    <table>
+        <tr>
+            <th>Antibiyotik</th>
+            <th>Başlangıç</th>
+            <th>Bitiş</th>
+            <th>Dozaj</th>
+            <th>Sil</th> <!-- yeni sütun -->
+        </tr>
+        {% for ka in hasta.kullanilan_antibiyotikler %}
+        <tr>
+            <td>{{ ka.antibiyotik }}</td>
+            <td>{{ ka.baslangic or '-' }}</td>
+            <td>{{ ka.bitis or '-' }}</td>
+            <td>{{ ka.dozaj }}</td>
+          <td>
+            <form action="{{ url_for('antibiyotik_sil', ka_id=ka.id) }}" method="POST" style="display:inline;">
+                <button type="submit" onclick="return confirm('Bu kaydı silmek istediğinize emin misiniz?')">
+                    🗑 Sil
+                </button>
+            </form>
+        </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4">Kayıt bulunamadı.</td></tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

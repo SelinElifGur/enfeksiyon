@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Bakteri Ekle</title>
+</head>
+<body>
+    <h1>{{ hasta.ad }} {{ hasta.soyad }} için Bakteri Ekle</h1>
+
+    <form method="POST">
+        <label>Bakteri Adı:</label><br>
+        <input type="text" name="isim" required><br><br>
+
+        <label>Üreme Tarihi:</label><br>
+        <input type="date" name="ureme_tarihi"><br><br>
+
+        <button type="submit">Kaydet</button>
+    </form>
+
+    <br>
+    <a href="{{ url_for('hasta_detay', id=hasta.id) }}">← Geri Dön</a>
+</body>
+</html>

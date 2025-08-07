@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Antibiyogram Ekle</title>
+</head>
+<body>
+    <h1>{{ bakteri.isim }} için Antibiyogram Ekle</h1>
+
+    <form method="POST">
+        <label>Antibiyotik Adı:</label><br>
+        <input type="text" name="antibiyotik" required><br><br>
+
+        <label>Sonuç:</label><br>
+        <select name="sonuc" required>
+            <option value="Duyarlı">Duyarlı</option>
+            <option value="Dirençli">Dirençli</option>
+            <option value="Orta Duyarlı">Orta Duyarlı</option>
+        </select><br><br>
+
+        <button type="submit">Kaydet</button>
+    </form>
+
+    <br>
+    <a href="{{ url_for('hasta_detay', id=bakteri.hasta_id) }}">← Geri Dön</a>
+</body>
+</html>

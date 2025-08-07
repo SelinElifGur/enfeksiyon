@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Hasta Listesi</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        h1 { color: #333; }
+        table { border-collapse: collapse; width: 80%; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        a { text-decoration: none; color: blue; }
+    </style>
+</head>
+<body>
+    <h1>Hasta Listesi</h1>
+<a href="{{ url_for('hasta_ekle') }}">+ Yeni Hasta Ekle</a>
+<br><br>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>TC Kimlik</th> <!-- 🔹 Yeni sütun -->
+        <th>Ad</th>
+        <th>Soyad</th>
+        <th>Servis</th>
+        <th>Detay</th>
+    </tr>
+    {% for hasta in hastalar %}
+    <tr>
+        <td>{{ hasta.id }}</td>
+        <td>{{ hasta.tc_kimlik }}</td> <!-- 🔹 TC burada görünecek -->
+        <td>{{ hasta.ad }}</td>
+        <td>{{ hasta.soyad }}</td>
+        <td>{{ hasta.servis }}</td>
+        <td><a href="{{ url_for('hasta_detay', id=hasta.id) }}">Görüntüle</a></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="6">Hiç hasta bulunamadı.</td></tr>
+    {% endfor %}
+</table>
+</body>
+</html>
