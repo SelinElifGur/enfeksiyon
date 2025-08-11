@@ -87,7 +87,7 @@ class HastaEkleDialog(QDialog):
             self.tc_input.text().strip(),
             self.ad_input.text().strip(),
             self.soyad_input.text().strip(),
-            self.dogum_input.date().toString("yyyy-MM-dd"),
+            self.dogum_input.date().toString("dd-MM-yyyy"),
             self.servis_input.text().strip(),
         )
 
@@ -110,7 +110,7 @@ class BakteriEkleDialog(QDialog):
     def get_data(self):
         return (
             self.bakteri_input.text().strip(),
-            self.tarih_input.date().toString("yyyy-MM-dd"),
+            self.tarih_input.date().toString("dd-MM-yyyy"),
         )
 
 class AntibiyogramEkleDialog(QDialog):
@@ -156,8 +156,8 @@ class AntibiyotikEkleDialog(QDialog):
     def get_data(self):
         return (
             self.antibiyotik_input.text().strip(),
-            self.baslangic_input.date().toString("yyyy-MM-dd"),
-            self.bitis_input.date().toString("yyyy-MM-dd"),
+            self.baslangic_input.date().toString("dd-MM-yyyy"),
+            self.bitis_input.date().toString("dd-MM-yyyy"),
             self.dozaj_input.text().strip(),
         )
 
@@ -256,7 +256,7 @@ class AnaPencere(QMainWindow, Ui_MainWindow):
         dlg.ad_input.setText(ad)
         dlg.soyad_input.setText(soyad)
         if dogum:
-            dlg.dogum_input.setDate(QDate.fromString(dogum, "yyyy-MM-dd"))
+            dlg.dogum_input.setDate(QDate.fromString(dogum, "dd-MM-yyyy"))
         dlg.servis_input.setText(servis)
         if dlg.exec_() != QDialog.Accepted:
             return
@@ -522,7 +522,7 @@ class DetayPencere(QMainWindow, Ui_DetayPencere):
         tarih = self.tableBakteri.item(r, 1).text()
         dlg = BakteriEkleDialog()
         dlg.bakteri_input.setText(isim)
-        dlg.tarih_input.setDate(QDate.fromString(tarih, "yyyy-MM-dd"))
+        dlg.tarih_input.setDate(QDate.fromString(tarih, "dd-MM-yyyy"))
         if dlg.exec_() != QDialog.Accepted: return
         yeni_isim, yeni_tarih = dlg.get_data()
         conn = sqlite3.connect(DB_PATH)
