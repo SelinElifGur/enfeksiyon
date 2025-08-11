@@ -23,8 +23,8 @@
    <widget class="QTableWidget" name="tableWidget">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>40</y>
+      <x>20</x>
+      <y>20</y>
       <width>611</width>
       <height>192</height>
      </rect>
@@ -72,8 +72,8 @@
    <widget class="QPushButton" name="btnHastaEkle">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>240</y>
+      <x>30</x>
+      <y>220</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -82,11 +82,11 @@
      <string>Ekle</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="btnHastaSil">
+   <widget class="QPushButton" name="btnHastaGuncelle">
     <property name="geometry">
      <rect>
-      <x>200</x>
-      <y>240</y>
+      <x>190</x>
+      <y>220</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -95,13 +95,13 @@
      <string>Sil</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="btnHastaGuncelle">
+   <widget class="QPushButton" name="btnHastaSil">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>240</y>
+      <x>110</x>
+      <y>220</y>
       <width>75</width>
-      <height>23</height>
+      <height>21</height>
      </rect>
     </property>
     <property name="text">
