@@ -21,7 +21,7 @@ Boyut: ~36 MB
 
 ## 📦 Kurulum
 
-1. `main.exe` dosyasını indirin
+1. `Mikrobiyoloji.exe` dosyasını indirin
 2. Çift tıklayarak uygulamayı başlatın (kurulum gerektirmez)
 3. Windows tarafından uyarı gelirse "Yine de çalıştır" deyin (bilinen uygulama değil uyarısı gelebilir)
 
@@ -37,6 +37,7 @@ Boyut: ~36 MB
 ## 📂 Kaynak Kodu
 
 Tüm kaynak kodlara [bu repodan](https://github.com/SelinElifGur/mikrobiyoloji) ulaşabilirsiniz.
+
 
 
 
