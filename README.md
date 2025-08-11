@@ -14,7 +14,7 @@ Programda aşağıdaki işlemleri yapabilirsiniz:
 ## Uygulama İndir
 
 🔽 [Programı buradan indirebilirsiniz](https://github.com/SelinElifGur/mikrobiyoloji/releases/download/v1.1/Mikrobiyoloji.exe)  
-Dosya adı: `main.exe`  
+Dosya adı: `Mikrobiyoloji.exe`  
 Boyut: ~36 MB
 
 ---
@@ -37,5 +37,6 @@ Boyut: ~36 MB
 ## 📂 Kaynak Kodu
 
 Tüm kaynak kodlara [bu repodan](https://github.com/SelinElifGur/mikrobiyoloji) ulaşabilirsiniz.
+
 
 
