@@ -10,7 +10,7 @@ from PyQt5.QtWidgets import (
     QFormLayout, QLineEdit, QDialogButtonBox, QTableWidgetItem,
     QDateEdit, QComboBox, QHeaderView, QTableWidget,
     QScrollArea, QWidget, QVBoxLayout, QLabel, QHBoxLayout,
-    QRadioButton, QToolBar, QAction
+    QRadioButton, QToolBar, QAction, QTextEdit
 )
 
 from ana_pencere import Ui_MainWindow
@@ -67,11 +67,11 @@ def veritabani_olustur():
         )
     """)
 
-    # kullanılan antibiyotik
+    #   İLAÇ
     cur.execute("""
-        CREATE TABLE IF NOT EXISTS kullanilan_antibiyotik(
+        CREATE TABLE IF NOT EXISTS ilac(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            antibiyotik TEXT,
+            ilac TEXT,
             baslangic TEXT,
             bitis TEXT,
             dozaj TEXT,
@@ -123,8 +123,11 @@ def veritabani_olustur():
         ("postnazal","TEXT"),("servikal","TEXT"),("solunum","TEXT"),
         ("ral","TEXT"),("ral_not","TEXT"),("ronkus","TEXT"),("ronkus_not","TEXT"),
         ("kalp_ritim","TEXT"),("kalp_not","TEXT"),("ufurum","TEXT"),("batin","TEXT"),
-        ("batin_not","TEXT"),("hsm","TEXT"),("ense","TEXT"),("mib","TEXT"),("dokuntu","TEXT"),
+        ("batin_not","TEXT"),("hsm","TEXT"),("ense","TEXT"),("mib","TEXT"),("dokuntu","TEXT"),("klinik_gozlem", "TEXT")
     ]
+
+        
+        
     _ensure_columns(cur, "anket", gerekli)
 
     conn.commit()
@@ -211,25 +214,28 @@ class AntibiyogramEkleDialog(QDialog):
     def get_data(self):
         return (self.antibiyotik_input.text().strip(), self.sonuc_input.currentText())
 
-class AntibiyotikEkleDialog(QDialog):
-    def __init__(self, baslik="Kullanılan Antibiyotik Bilgisi"):
+class IlacEkleDialog(QDialog):
+    def __init__(self, baslik="İlaç Bilgisi"):
         super().__init__()
         self.setWindowTitle(baslik)
         layout = QFormLayout(self)
-        self.antibiyotik_input = QLineEdit()
+        
+        self.ilac_input = QLineEdit()
         self.baslangic_input = QDateEdit(); self.baslangic_input.setCalendarPopup(True); self.baslangic_input.setDate(QDate.currentDate())
         self.bitis_input = QDateEdit(); self.bitis_input.setCalendarPopup(True); self.bitis_input.setDate(QDate.currentDate())
         self.dozaj_input = QLineEdit()
-        layout.addRow("Antibiyotik Adı:", self.antibiyotik_input)
+        
+        layout.addRow("İlaç Adı:", self.ilac_input)
         layout.addRow("Başlangıç Tarihi:", self.baslangic_input)
         layout.addRow("Bitiş Tarihi:", self.bitis_input)
         layout.addRow("Dozaj:", self.dozaj_input)
+        
         btns = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         btns.accepted.connect(self.accept); btns.rejected.connect(self.reject)
         layout.addWidget(btns)
 
     def get_data(self):
-        return (self.antibiyotik_input.text().strip(),
+        return (self.ilac_input.text().strip(),
                 self.baslangic_input.date().toString("dd-MM-yyyy"),
                 self.bitis_input.date().toString("dd-MM-yyyy"),
                 self.dozaj_input.text().strip())
@@ -311,6 +317,14 @@ class AnketPenceresi(QDialog):
         self.hsm = add_vy("HSM"); self.ense = add_vy("ENSE SERTLİĞİ"); self.mib = add_vy("MENİNGEAL İRRİTASYON BULGUSU (MİB)")
         self.dokuntu = add_vy("DÖKÜNTÜ")
 
+        # ---------- KLİNİK GÖZLEM ----------
+        add_header("KLİNİK GÖZLEM")
+        self.klinik_gozlem = QTextEdit()
+        self.klinik_gozlem.setPlaceholderText("Klinik gözlem / notlar…")
+        self.klinik_gozlem.setMinimumHeight(140)   # daha geniş görünüm
+        self.form.addRow(QLabel("Klinik gözlem"), self.klinik_gozlem)
+
+
         btns = QDialogButtonBox(QDialogButtonBox.Save | QDialogButtonBox.Cancel)
         btns.accepted.connect(self.kaydet); btns.rejected.connect(self.reject); root.addWidget(btns)
         self._son_anketi_yukle()
@@ -343,6 +357,21 @@ class AnketPenceresi(QDialog):
                 if nk: widget[2].setText(data.get(nk) or "")
             else:
                 widget.setText("" if val is None else str(val))
+
+        def set_txt(widget, key):
+            val = data.get(key)
+            if isinstance(widget, tuple):  # (rb1, rb2, le)
+                set_vy((widget[0], widget[1]), key)
+                nk = key + "_not" if key + "_not" in data else None
+                if nk:
+                    widget[2].setText(data.get(nk) or "")
+            else:
+                # QLineEdit veya QTextEdit'i otomatik ayırt et
+                if hasattr(widget, "setPlainText"):
+                    widget.setPlainText("" if val is None else str(val))
+                else:
+                    widget.setText("" if val is None else str(val))
+
 
         # --- Ön tanı
         for pair,key in [(self.ates,"ates"),(self.oksuruk,"oksuruk"),(self.gece_terleme,"gece_terleme"),
@@ -380,10 +409,18 @@ class AnketPenceresi(QDialog):
         set_vy(self.ronkus[:2], "ronkus"); self.ronkus[2].setText(data.get("ronkus_not") or "")
         set_eh(self.kalp_ritim, "kalp_ritim"); set_eh(self.batin, "batin")
 
+        set_txt(self.klinik_gozlem, "klinik_gozlem")
+
+
     def kaydet(self):
         V, E = self._v, self._e
-        def txt(w): return ((V((w[0],w[1])), w[2].text().strip() or None) if isinstance(w, tuple)
-                            else (w.text().strip() or None))
+        def txt(w): 
+            if isinstance(w, tuple):
+                return (V((w[0],w[1])), w[2].text().strip() or None)
+            if hasattr(w, "toPlainText"):
+                return w.toPlainText().strip() or None
+         # QLineEdit vb.
+            return w.text().strip() or None
         # Ön tanı
         ates, oksuruk, gece, kilo = V(self.ates), V(self.oksuruk), V(self.gece_terleme), V(self.kilo_kaybi)
         aile_tb, usye, agzi, inhaler = V(self.aile_tb), V(self.usye_asye), V(self.agzi_acik), V(self.inhaler)
@@ -408,6 +445,9 @@ class AnketPenceresi(QDialog):
         kalp_ritim, kalp_not = E(self.kalp_ritim), txt(self.kalp_not)
         ufurum, batin, batin_not = V(self.ufurum), E(self.batin), txt(self.batin_not)
         hsm, ense, mib, dokuntu = V(self.hsm), V(self.ense), V(self.mib), V(self.dokuntu)
+        
+        klinik_gozlem = txt(self.klinik_gozlem)
+
 
         row = {
             "hasta_id": self.hasta_id, "created_at": QDateTime.currentDateTime().toString(Qt.ISODate),
@@ -425,7 +465,8 @@ class AnketPenceresi(QDialog):
             "orofarenks":orofarenks,"postnazal":postnazal,"servikal":servikal,"solunum":solunum,
             "ral":ral,"ral_not":ral_not,"ronkus":ronkus,"ronkus_not":ronkus_not,
             "kalp_ritim":kalp_ritim,"kalp_not":kalp_not,"ufurum":ufurum,
-            "batin":batin,"batin_not":batin_not,"hsm":hsm,"ense":ense,"mib":mib,"dokuntu":dokuntu,
+            "batin":batin,"batin_not":batin_not,"hsm":hsm,"ense":ense,"mib":mib,"dokuntu":dokuntu,"klinik_gozlem": klinik_gozlem,
+
         }
         conn = sqlite3.connect(DB_PATH); cur = conn.cursor()
         cols = ",".join(row.keys()); qs = ",".join("?" for _ in row)
@@ -517,7 +558,7 @@ class AnaPencere(QMainWindow, Ui_MainWindow):
         rows = cur.fetchall(); conn.close(); self._hasta_tabloyu_doldur(rows)
 
     def hasta_ekle(self):
-        dlg = HastaEkleDialog(self)
+        dlg = HastaEkleDialog("Yeni Hasta Ekle", self)
         if dlg.exec_() != QDialog.Accepted: return
         tc, ad, soyad, dogum, servis = dlg.get_data()
         if not tc or not ad or not soyad:
@@ -577,7 +618,7 @@ class AnaPencere(QMainWindow, Ui_MainWindow):
 class DetayPencere(QMainWindow, Ui_DetayPencere):
     BAK_SIRA, BAK_ID, BAK_KULTUR, BAK_AD, BAK_TARIH = 0, 1, 2, 3, 4
     ABG_SIRA, ABG_ID, ABG_AB, ABG_SONUC = 0, 1, 2, 3
-    ABX_SIRA, ABX_ID, ABX_AD, ABX_BAS, ABX_BIT, ABX_DOZ = 0, 1, 2, 3, 4, 5
+    ABX_SIRA, ABX_ID, ABX_ILAC, ABX_BAS, ABX_BIT, ABX_DOZ = 0, 1, 2, 3, 4, 5
 
     def __init__(self, hasta_id: int):
         super().__init__()
@@ -648,16 +689,16 @@ class DetayPencere(QMainWindow, Ui_DetayPencere):
             hdr.setSectionResizeMode(self.ABG_AB, QHeaderView.Stretch)
             hdr.setSectionResizeMode(self.ABG_SONUC, QHeaderView.Stretch)
 
-        # Kullanılan antibiyotik
-        t = self.tableKullanilanAntibiyotik
+        # Kullanılan ilaç
+        t = self.tableilac
         if t.columnCount() < 6: t.setColumnCount(6)
-        t.setHorizontalHeaderLabels(["", "ID", "Antibiyotik", "Başlangıç", "Bitiş", "Dozaj"])
+        t.setHorizontalHeaderLabels(["", "ID", "İlaç", "Başlangıç", "Bitiş", "Dozaj"])
         t.verticalHeader().setVisible(False); t.setAlternatingRowColors(True)
         t.setSelectionBehavior(QTableWidget.SelectRows); t.setEditTriggers(QTableWidget.NoEditTriggers)
         t.setColumnHidden(self.ABX_ID, True)
         hdr = t.horizontalHeader()
         hdr.setSectionResizeMode(self.ABX_SIRA, QHeaderView.ResizeToContents)
-        hdr.setSectionResizeMode(self.ABX_AD, QHeaderView.Stretch)
+        hdr.setSectionResizeMode(self.ABX_ILAC, QHeaderView.Stretch)
         hdr.setSectionResizeMode(self.ABX_BAS, QHeaderView.Stretch)
         hdr.setSectionResizeMode(self.ABX_BIT, QHeaderView.Stretch)
         hdr.setSectionResizeMode(self.ABX_DOZ, QHeaderView.Stretch)
@@ -685,16 +726,16 @@ class DetayPencere(QMainWindow, Ui_DetayPencere):
         if self.btnAntibiyogramSil: self.btnAntibiyogramSil.clicked.connect(self.antibiyogram_sil)
         if self.btnAntibiyogramGuncelle: self.btnAntibiyogramGuncelle.clicked.connect(self.antibiyogram_guncelle)
 
-        if hasattr(self, "btnkullanilan_antibiyotik_ekle"):
-            self.btnkullanilan_antibiyotik_ekle.clicked.connect(self.kullanilan_antibiyotik_ekle)
-        if hasattr(self, "btnkullanilan_antibiyotik_sil"):
-            self.btnkullanilan_antibiyotik_sil.clicked.connect(self.kullanilan_antibiyotik_sil)
-        if hasattr(self, "btnkullanilan_antibiyotik_guncelle"):
-            self.btnkullanilan_antibiyotik_guncelle.clicked.connect(self.kullanilan_antibiyotik_guncelle)
+        if hasattr(self, "btnilac_ekle"):
+            self.btnilac_ekle.clicked.connect(self.ilac_ekle)
+        if hasattr(self, "btnilac_sil"):
+            self.btnilac_sil.clicked.connect(self.ilac_sil)
+        if hasattr(self, "btnilac_guncelle"):
+            self.btnilac_guncelle.clicked.connect(self.ilac_guncelle)
 
         self.tableBakteri.cellClicked.connect(self.bakteri_secildi)
         self.listele_bakteri()
-        self.listele_antibiyotik()
+        self.listele_ilac()
 
         # ----- LABORATUVAR -----
         self.btnLabKaydet = getattr(self, "btnLabKaydet", None)
@@ -749,17 +790,17 @@ class DetayPencere(QMainWindow, Ui_DetayPencere):
             t.item(r, self.ABG_SIRA).setTextAlignment(Qt.AlignCenter)
             t.item(r, self.ABG_SONUC).setTextAlignment(Qt.AlignCenter)
 
-    def listele_antibiyotik(self):
+    def listele_ilac(self):
         conn = sqlite3.connect(DB_PATH); cur = conn.cursor()
-        cur.execute("""SELECT id, antibiyotik, baslangic, bitis, dozaj FROM kullanilan_antibiyotik
+        cur.execute("""SELECT id, ilac, baslangic, bitis, dozaj FROM ilac
                        WHERE hasta_id=? ORDER BY id""", (self.hasta_id,))
         rows = cur.fetchall(); conn.close()
-        t = self.tableKullanilanAntibiyotik; t.setRowCount(0)
+        t = self.tableilac; t.setRowCount(0)
         for sira, (kid, ad, bas, bit, doz) in enumerate(rows, start=1):
             r = t.rowCount(); t.insertRow(r)
             t.setItem(r, self.ABX_SIRA, QTableWidgetItem(str(sira)))
             t.setItem(r, self.ABX_ID, QTableWidgetItem(str(kid)))
-            t.setItem(r, self.ABX_AD, QTableWidgetItem(ad or ""))
+            t.setItem(r, self.ABX_ILAC, QTableWidgetItem(ad or ""))
             t.setItem(r, self.ABX_BAS, QTableWidgetItem(bas or ""))
             t.setItem(r, self.ABX_BIT, QTableWidgetItem(bit or ""))
             t.setItem(r, self.ABX_DOZ, QTableWidgetItem(doz or ""))
@@ -858,34 +899,34 @@ class DetayPencere(QMainWindow, Ui_DetayPencere):
             bid = self.tableBakteri.item(br, self.BAK_ID).text()
             self.listele_antibiyogram(bid)
 
-    def kullanilan_antibiyotik_ekle(self):
-        dlg = AntibiyotikEkleDialog("Kullanılan Antibiyotik Ekle")
+    def ilac_ekle(self):
+        dlg = IlacEkleDialog("İlaç Ekle")
         if dlg.exec_() != QDialog.Accepted: return
-        ad, bas, bit, doz = dlg.get_data()
+        ilac, bas, bit, doz = dlg.get_data()
         conn = sqlite3.connect(DB_PATH); cur = conn.cursor()
-        cur.execute("""INSERT INTO kullanilan_antibiyotik(antibiyotik, baslangic, bitis, dozaj, hasta_id)
-                       VALUES (?,?,?,?,?)""", (ad, bas, bit, doz, self.hasta_id))
-        conn.commit(); conn.close(); self.listele_antibiyotik()
+        cur.execute("""INSERT INTO ilac(ilac, baslangic, bitis, dozaj, hasta_id)
+                       VALUES (?,?,?,?,?)""", (ilac, bas, bit, doz, self.hasta_id))
+        conn.commit(); conn.close(); self.listele_ilac()
 
-    def kullanilan_antibiyotik_sil(self):
-        r = self.tableKullanilanAntibiyotik.currentRow()
-        if r < 0: QMessageBox.warning(self, "Uyarı", "Silmek için antibiyotik seçin!"); return
-        abx_id = self.tableKullanilanAntibiyotik.item(r, self.ABX_ID).text()
+    def ilac_sil(self):
+        r = self.tableilac.currentRow()
+        if r < 0: QMessageBox.warning(self, "Uyarı", "Silmek için ilaç seçin!"); return
+        ilac_id = self.tableilac.item(r, self.ABX_ID).text()
         if QMessageBox.question(self, "Onay", "Seçili kaydı silmek istiyor musunuz?",
                                 QMessageBox.Yes | QMessageBox.No) != QMessageBox.Yes: return
         conn = sqlite3.connect(DB_PATH); cur = conn.cursor()
-        cur.execute("DELETE FROM kullanilan_antibiyotik WHERE id=?", (abx_id,))
-        conn.commit(); conn.close(); self.listele_antibiyotik()
+        cur.execute("DELETE FROM ilac WHERE id=?", (ilac_id,))
+        conn.commit(); conn.close(); self.listele_ilac()
 
-    def kullanilan_antibiyotik_guncelle(self):
-        r = self.tableKullanilanAntibiyotik.currentRow()
+    def ilac_guncelle(self):
+        r = self.tableilac.currentRow()
         if r < 0: QMessageBox.warning(self, "Uyarı", "Güncellemek için bir kayıt seçin!"); return
-        abx_id = self.tableKullanilanAntibiyotik.item(r, self.ABX_ID).text()
-        ad = self.tableKullanilanAntibiyotik.item(r, self.ABX_AD).text()
-        bas = self.tableKullanilanAntibiyotik.item(r, self.ABX_BAS).text()
-        bit = self.tableKullanilanAntibiyotik.item(r, self.ABX_BIT).text()
-        doz = self.tableKullanilanAntibiyotik.item(r, self.ABX_DOZ).text()
-        dlg = AntibiyotikEkleDialog("Kullanılan Antibiyotik Güncelle"); dlg.antibiyotik_input.setText(ad)
+        ilac_id = self.tableilac.item(r, self.ABX_ID).text()
+        ilac = self.tableilac.item(r, self.ABX_ILAC).text()
+        bas = self.tableilac.item(r, self.ABX_BAS).text()
+        bit = self.tableilac.item(r, self.ABX_BIT).text()
+        doz = self.tableilac.item(r, self.ABX_DOZ).text()
+        dlg = IlacEkleDialog("İlaç Güncelle"); dlg.ilac_input.setText(ilac)
         if bas:
             d = QDate.fromString(bas, "dd-MM-yyyy"); 
             if not d.isValid(): d = QDate.fromString(bas, "yyyy-MM-dd")
@@ -896,12 +937,12 @@ class DetayPencere(QMainWindow, Ui_DetayPencere):
             if d.isValid(): dlg.bitis_input.setDate(d)
         dlg.dozaj_input.setText(doz)
         if dlg.exec_() != QDialog.Accepted: return
-        yeni_ad, yeni_bas, yeni_bit, yeni_doz = dlg.get_data()
+        yeni_ilac, yeni_bas, yeni_bit, yeni_doz = dlg.get_data()
         conn = sqlite3.connect(DB_PATH); cur = conn.cursor()
-        cur.execute("""UPDATE kullanilan_antibiyotik
-                       SET antibiyotik=?, baslangic=?, bitis=?, dozaj=? WHERE id=?""",
-                    (yeni_ad, yeni_bas, yeni_bit, yeni_doz, abx_id))
-        conn.commit(); conn.close(); self.listele_antibiyotik()
+        cur.execute("""UPDATE ilac
+                       SET ilac=?, baslangic=?, bitis=?, dozaj=? WHERE id=?""",
+                    (yeni_ilac, yeni_bas, yeni_bit, yeni_doz, abx_id))
+        conn.commit(); conn.close(); self.listele_ilac()
 
     # --------- Laboratuvar yardımcı/kaydet/yükle ---------
         

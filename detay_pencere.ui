@@ -327,6 +327,20 @@
        </rect>
       </property>
      </widget>
+     <zorder>label_7</zorder>
+     <zorder>le_ast</zorder>
+     <zorder>le_tbil</zorder>
+     <zorder>label_12</zorder>
+     <zorder>label_9</zorder>
+     <zorder>label_8</zorder>
+     <zorder>label_10</zorder>
+     <zorder>label_11</zorder>
+     <zorder>le_albumin</zorder>
+     <zorder>le_ggt</zorder>
+     <zorder>label_13</zorder>
+     <zorder>le_dbil</zorder>
+     <zorder>le_alt</zorder>
+     <zorder>le_alp</zorder>
     </widget>
     <widget class="QGroupBox" name="grpppd">
      <property name="geometry">
@@ -977,7 +991,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="widgetantibiyotik" native="true">
+    <widget class="QWidget" name="widgeilac" native="true">
      <property name="geometry">
       <rect>
        <x>0</x>
@@ -986,7 +1000,7 @@
        <height>271</height>
       </rect>
      </property>
-     <widget class="QTableWidget" name="tableKullanilanAntibiyotik">
+     <widget class="QTableWidget" name="tableilac">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -1005,7 +1019,7 @@
       </column>
       <column>
        <property name="text">
-        <string>Antibiyotik</string>
+        <string>Ilac</string>
        </property>
       </column>
       <column>
@@ -1024,7 +1038,7 @@
        </property>
       </column>
      </widget>
-     <widget class="QPushButton" name="btnkullanilan_antibiyotik_guncelle">
+     <widget class="QPushButton" name="btnilac_guncelle">
       <property name="geometry">
        <rect>
         <x>200</x>
@@ -1034,10 +1048,10 @@
        </rect>
       </property>
       <property name="text">
-       <string>Kullanılan Antibiyotik Güncelle</string>
+       <string>İlaç Güncelle</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="btnkullanilan_antibiyotik_ekle">
+     <widget class="QPushButton" name="btnilac_ekle">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -1047,10 +1061,10 @@
        </rect>
       </property>
       <property name="text">
-       <string>Kullanilan Antibiyotik Ekle</string>
+       <string>İlaç Ekle</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="btnkullanilan_antibiyotik_sil">
+     <widget class="QPushButton" name="btnilac_sil">
       <property name="geometry">
        <rect>
         <x>380</x>
@@ -1060,7 +1074,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Kullanilan Antibiyotik Sil</string>
+       <string>İlaç Sil</string>
       </property>
      </widget>
     </widget>
