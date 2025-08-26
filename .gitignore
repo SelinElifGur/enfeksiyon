@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# Sanal ortam
+.venv/
+venv/
+env/
+
+# PyInstaller / build çıktıları
+build/
+dist/
+*.spec
+
+# IDE dosyaları
+.vscode/
+.idea/
+
+# OS artıkları
+.DS_Store
+Thumbs.db
+
+# Yerel veritabanını repo dışında tut
+hastatakip.db
