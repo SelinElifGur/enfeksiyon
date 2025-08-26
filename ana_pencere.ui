@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>668</width>
-    <height>322</height>
+    <width>661</width>
+    <height>315</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -92,7 +92,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Sil</string>
+     <string>Güncelle</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btnHastaSil">
@@ -101,24 +101,37 @@
       <x>110</x>
       <y>220</y>
       <width>75</width>
-      <height>21</height>
+      <height>23</height>
      </rect>
     </property>
     <property name="text">
-     <string>Guncelle</string>
+     <string>Sil</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btnDetayGoster">
     <property name="geometry">
      <rect>
-      <x>560</x>
+      <x>564</x>
       <y>240</y>
-      <width>75</width>
-      <height>23</height>
+      <width>71</width>
+      <height>21</height>
      </rect>
     </property>
     <property name="text">
      <string>Detay</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnAnket">
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>240</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Anket</string>
     </property>
    </widget>
   </widget>
@@ -127,7 +140,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>668</width>
+     <width>661</width>
      <height>21</height>
     </rect>
    </property>
