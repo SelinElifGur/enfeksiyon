@@ -1,4 +1,4 @@
-@"
+
 # Enfeksiyon Hasta Takip Sistemi
 
 Mikrobiyoloji / enfeksiyon hasta takip aracı. Windows için tek dosya çalıştırılabilir (**.exe**) sürümü aşağıdadır.
@@ -12,4 +12,5 @@ Mikrobiyoloji / enfeksiyon hasta takip aracı. Windows için tek dosya çalışt
 ## Kaynaktan Çalıştırma
 ```bash
 python enfeksiyon.py
+
 
