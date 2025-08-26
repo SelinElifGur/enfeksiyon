@@ -47,10 +47,11 @@ Depoyu klonlayıp Python ile çalıştırmak için:
 git clone https://github.com/SelinElifGur/enfeksiyon.git
 cd enfeksiyon
 python enfeksiyon.py
-
+```
 ---
 
 ## Geri Bildirim & Katkı
 
 Hata bildirimi ve öneriler için Issues sekmesini kullanabilirsiniz. 
+
 
