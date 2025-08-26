@@ -7,10 +7,11 @@ Mikrobiyoloji / enfeksiyon hasta takip aracı. Windows için tek dosya çalışt
 1. Aşağıdaki bağlantıdan `.exe` dosyasını indirin.
 2. Dosyayı çift tıklayarak çalıştırın. Windows SmartScreen yayıcı bilinmiyor uyarısı verebilir; “Daha fazla bilgi > Yine de çalıştır” deyin.
 
-**İndir:** [eff_hts.exe](#indir-baglantisi-buraya-gelecek)
+**İndir:** [enf_hts.exe](#indir-baglantisi-buraya-gelecek)
 
 ## Kaynaktan Çalıştırma
 ```bash
 python enfeksiyon.py
+
 
 
