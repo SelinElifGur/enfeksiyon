@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1063, 876)
+        MainWindow.resize(1062, 876)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.grpLaboratuvar = QtWidgets.QGroupBox(self.centralwidget)
@@ -176,6 +176,9 @@ class Ui_MainWindow(object):
         self.btnLabKaydet = QtWidgets.QPushButton(self.grpLaboratuvar)
         self.btnLabKaydet.setGeometry(QtCore.QRect(330, 790, 75, 23))
         self.btnLabKaydet.setObjectName("btnLabKaydet")
+        self.pushButton = QtWidgets.QPushButton(self.grpLaboratuvar)
+        self.pushButton.setGeometry(QtCore.QRect(330, 762, 75, 21))
+        self.pushButton.setObjectName("pushButton")
         self.grpMikrobiyoloji = QtWidgets.QGroupBox(self.centralwidget)
         self.grpMikrobiyoloji.setGeometry(QtCore.QRect(20, 10, 621, 821))
         self.grpMikrobiyoloji.setObjectName("grpMikrobiyoloji")
@@ -310,7 +313,7 @@ class Ui_MainWindow(object):
         self.btnilac_sil.setObjectName("btnilac_sil")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1063, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1062, 21))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -351,6 +354,7 @@ class Ui_MainWindow(object):
         self.label_20.setText(_translate("MainWindow", "Fosfor  ( P )            :"))
         self.label_21.setText(_translate("MainWindow", "Magnezyum ( Mg )  :"))
         self.btnLabKaydet.setText(_translate("MainWindow", "Kaydet"))
+        self.pushButton.setText(_translate("MainWindow", "Yazdır"))
         self.grpMikrobiyoloji.setTitle(_translate("MainWindow", "MİKROBİYOLOJİ"))
         self.btnAntibiyogramsil.setText(_translate("MainWindow", "Antibiyogram Sil"))
         self.btnAntibiyogramekle.setText(_translate("MainWindow", "Antibiyogram Ekle"))
@@ -423,3 +427,13 @@ class Ui_MainWindow(object):
         self.btnilac_guncelle.setText(_translate("MainWindow", "İlaç Güncelle"))
         self.btnilac_ekle.setText(_translate("MainWindow", "İlaç Ekle"))
         self.btnilac_sil.setText(_translate("MainWindow", "İlaç Sil"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())
