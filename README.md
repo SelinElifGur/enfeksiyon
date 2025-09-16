@@ -9,9 +9,9 @@ Veriler yerel **SQLite** veritabanında (`hastatakip.db`) saklanır; ilk çalı�
 
 ## 🚀 Hızlı Başlangıç (Windows – tek dosya EXE)
 
-**İndir:** [enf_hts.exe](https://github.com/SelinElifGur/enfeksiyon/releases/latest/download/enf_hts.exe)
+**İndir:** [enf_hts.exe](https://github.com/SelinElifGur/enfeksiyon/releases/latest/download/enfeksiyon.exe)
 
-!!! İndirme açılmazsa, depo içindeki `dist/enf_hts.exe` yolundan da indirebilirsiniz.
+!!! İndirme açılmazsa, depo içindeki `dist/enfeksiyon.exe` yolundan da indirebilirsiniz.
 
 1. Dosyayı indirin ve **çift tıklayın**.  
 2. Windows SmartScreen uyarısı çıkarsa: **"Ek Bilgi” → “Yine de çalıştır”**.  
@@ -53,6 +53,7 @@ python enfeksiyon.py
 ## Geri Bildirim & Katkı
 
 Hata bildirimi ve öneriler için Issues sekmesini kullanabilirsiniz. 
+
 
 
 
