@@ -31,6 +31,12 @@ Veriler yerel **SQLite** veritabanında (`hastatakip.db`) saklanır; ilk çalı�
 - **Kolay Yedekleme:** Tek dosyalı SQLite veritabanı (`hastatakip.db`)
 
 ---
+## 📖 Kullanıcı Kılavuzu
+
+Detaylı kullanım adımları için PDF dosyasını inceleyebilirsiniz:  
+👉 [Kullanıcı Kılavuzu (PDF)](enfeksiyon_kullanici_kilavuzu.pdf)
+
+---
 
 ## 🔒 Veri & Gizlilik
 
@@ -53,6 +59,7 @@ python enfeksiyon.py
 ## Geri Bildirim & Katkı
 
 Hata bildirimi ve öneriler için Issues sekmesini kullanabilirsiniz. 
+
 
 
 
