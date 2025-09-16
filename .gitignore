@@ -25,3 +25,5 @@ Thumbs.db
 
 # Yerel veritabanını repo dışında tut
 hastatakip.db
+__pycache__/
+*.pyc
